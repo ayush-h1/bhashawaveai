@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>भारत बोट</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 20px; background: #f0f4f8; }
+        .chat-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 8px; }
+        .user { background: #dff0d8; text-align: right; }
+        .bot { background: #d9edf7; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="chat-box">
+        <h2>भारत बोट 🤖</h2>
+        {% for msg in messages %}
+            <div class="message {{ msg.role }}">{{ msg.content }}</div>
+        {% endfor %}
+        <form method="post">
+            <input type="text" name="message" placeholder="अपना संदेश लिखें..." style="width:80%" required />
+            <button type="submit">भेजें</button>
+        </form>
+    </div>
+</body>
+</html>

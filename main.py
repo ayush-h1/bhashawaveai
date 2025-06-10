@@ -14,7 +14,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 app = FastAPI()
 translator = Translator()
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+#app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 BUSINESS_CONTEXT = """

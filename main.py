@@ -1,63 +1,36 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from googletrans import Translator
-import openai
 from dotenv import load_dotenv
+import openai
 import os
 
-# Load environment variables
+# Load environment variables (includes OPENAI_API_KEY)
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Initialize FastAPI app
 app = FastAPI()
 
-# Enable CORS
+# ✅ Add CORS middleware immediately after app creation
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or ["http://localhost:5173"] for stricter control
+    allow_origins=["http://localhost:5173"],  # ✅ React dev server origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Translator
-translator = Translator()
-
-# Business context
-BUSINESS_CONTEXT = """
-You are an AI assistant for a local coaching center in India.
-You answer in simple, friendly language.
-
-Sample FAQs:
-Q: क्या क्लासेस ऑनलाइन हैं?
-A: हां, हमारी क्लासेस ऑनलाइन और ऑफलाइन दोनों होती हैं।
-Q: फीस कितनी है?
-A: कोर्स के अनुसार फीस अलग-अलग होती है। कृपया कोर्स बताएं।
-Q: डेमो क्लास मिलता है क्या?
-A: हां, एक फ्री डेमो क्लास उपलब्ध है।
-"""
-
-# Request model
+# Pydantic model for request body
 class UserInput(BaseModel):
     user_input: str
 
-# POST endpoint
+# POST route to handle chat
 @app.post("/")
-async def get_response(data: UserInput):
-    translated = translator.translate(data.user_input, src="hi", dest="en")
-    english_input = translated.text
+async def chat_endpoint(data: UserInput):
+    user_message = data.user_input
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[
-            {"role": "system", "content": BUSINESS_CONTEXT},
-            {"role": "user", "content": english_input}
-        ]
-    )
+    # Example GPT-style reply (replace with real OpenAI call later)
+    reply = f"आपने कहा: {user_message}"
 
-    english_reply = response['choices'][0]['message']['content']
-    final_reply = translator.translate(english_reply, src='en', dest='hi').text
-
-    return {"reply": final_reply}
+    return {"reply": reply}

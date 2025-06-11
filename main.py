@@ -1,12 +1,19 @@
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+app = FastAPI()  # ✅ Define app FIRST
+
+# ✅ Then add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # OR replace "*" with ["http://localhost:5173"]
+    allow_origins=["*"],  # or ["http://localhost:5173"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ... your routes below ...
+
 
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
@@ -21,7 +28,7 @@ import os
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-app = FastAPI()
+
 translator = Translator()
 
 #app.mount("/static", StaticFiles(directory="static"), name="static")

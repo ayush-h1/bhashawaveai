@@ -1,33 +1,31 @@
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from googletrans import Translator
 import openai
-import os
 from dotenv import load_dotenv
+import os
 
-# Load API keys from .env
+# Load environment variables
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Initialize FastAPI
+# Initialize FastAPI app
 app = FastAPI()
 
-# Enable CORS for frontend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
-  # For production, set this to your domain only
+    allow_origins=["*"],  # Or ["http://localhost:5173"] for stricter control
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Translator instance
+# Translator
 translator = Translator()
 
-# Business context for GPT
+# Business context
 BUSINESS_CONTEXT = """
 You are an AI assistant for a local coaching center in India.
 You answer in simple, friendly language.
@@ -41,13 +39,13 @@ Q: डेमो क्लास मिलता है क्या?
 A: हां, एक फ्री डेमो क्लास उपलब्ध है।
 """
 
-# Request model from frontend
+# Request model
 class UserInput(BaseModel):
     user_input: str
 
-# POST route to handle chat
+# POST endpoint
 @app.post("/")
-async def chat(data: UserInput):
+async def get_response(data: UserInput):
     translated = translator.translate(data.user_input, src="hi", dest="en")
     english_input = translated.text
 
@@ -60,6 +58,6 @@ async def chat(data: UserInput):
     )
 
     english_reply = response['choices'][0]['message']['content']
-    final_reply = translator.translate(english_reply, src="en", dest="hi").text
+    final_reply = translator.translate(english_reply, src='en', dest='hi').text
 
-    return JSONResponse(content={"reply": final_reply})
+    return {"reply": final_reply}

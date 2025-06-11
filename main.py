@@ -16,10 +16,11 @@ app.add_middleware(
 
 
 from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from fastapi import Request
+from pydantic import BaseModel
+
 import openai
 from googletrans import Translator
 from dotenv import load_dotenv
@@ -29,10 +30,18 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
+class UserInput(BaseModel):
+    user_input: str
+
+@app.post("/")
+async def post_chat(data: UserInput, request: Request):
+    translated = translator.translate(data.user_input, src="hi", dest="en")
+    ...
+
+
 translator = Translator()
 
-#app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+
 
 BUSINESS_CONTEXT = """
 You are an AI assistant for a local coaching center in India.
@@ -47,9 +56,7 @@ Q: डेमो क्लास मिलता है क्या?
 A: हां, एक फ्री डेमो क्लास उपलब्ध है।
 """
 
-@app.get("/", response_class=HTMLResponse)
-async def get_chat(request: Request):
-    return templates.TemplateResponse("chat.html", {"request": request, "messages": []})
+
 
 @app.post("/", response_class=HTMLResponse)
 async def post_chat(request: Request, message: str = Form(...)):

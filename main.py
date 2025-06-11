@@ -58,7 +58,7 @@ A: हां, एक फ्री डेमो क्लास उपलब्�
 
 
 
-@app.post("/", response_class=HTMLResponse)
+
 async def post_chat(request: Request, message: str = Form(...)):
     translated = translator.translate(message, src="hi", dest="en")
     english_input = translated.text

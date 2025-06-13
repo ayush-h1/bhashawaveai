@@ -20,7 +20,7 @@ origins = [
 # ✅ Add CORS middleware immediately after app creation
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # ✅ React dev server origin
+    allow_origins=[https://frontend4-5y6k.onrender.com],  # ✅ React dev server origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

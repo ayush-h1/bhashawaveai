@@ -12,6 +12,11 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # Initialize FastAPI app
 app = FastAPI()
 
+# ✅ Set the exact origin of your frontend (Render deploy URL)
+origins = [
+    "https://frontend4-5y6k.onrender.com"
+]
+
 # ✅ Add CORS middleware immediately after app creation
 app.add_middleware(
     CORSMiddleware,

@@ -73,3 +73,4 @@ async def chat_api(data: UserInput):
 
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+

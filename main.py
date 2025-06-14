@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from googletrans import Translator
 import openai
 import os
 from dotenv import load_dotenv
@@ -52,8 +51,23 @@ class UserInput(BaseModel):
 async def chat_api(data: UserInput):
     try:
         # Translate Hindi to English
-        translated = translator.translate(data.user_input, src="hi", dest="en")
-        english_input = translated.text
+     from deep_translator import GoogleTranslator
+
+# Hindi to English
+
+
+# ... AI processing ...
+
+# English to Hindi
+from deep_translator import GoogleTranslator
+
+# Hindi to English
+english_input = GoogleTranslator(source='hi', target='en').translate(data.user_input)
+
+# ... AI processing ...
+
+# English to Hindi
+final_reply = GoogleTranslator(source='en', target='hi').translate(english_reply)
 
         # Get OpenAI response
         response = openai.ChatCompletion.create(
